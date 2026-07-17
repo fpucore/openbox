@@ -18,11 +18,11 @@ This continuation of Openbox implements a comprehensive modernization pipeline�
 
 ### 1. Polyglot Session-Init (New in v3.8.0)
 
-A Rust-supervised, Perl 6-transpiled session manager that replaces legacy autostart exec with athree-tier graceful degradation pipeline:
+A Rust-supervised, Perl 6-transpiled session manager that replaces legacy autostart exec with a three-tier graceful degradation pipeline:
 
-* **Tier 1 — Full Pipeline (Rust + Perl 6):** Rust daemonizes and supervises; Perl 6 parses the legacy ~/.config/openbox/autostart config at runtime, strips noise, comments, normalizes ~/ > $HOME/, structures lockfile guards as native Perl 6 conditionals, and emits a clean exec script.
-* **Tier 2 — Safe Shell Executor (Rust only):** When Perl 6 is unavailable, Rust still provides memory-safe daemonization, unified logging, and process supervision while exec the legacy autostart directly via /bin/sh.
-* **Tier 3 — Pure Legacy (Neither):** When neither Rust nor Perl 6 is installed, Openbox falls back to its old native C/shell autostart path unchanged, ensuring zero breakage on minimal or legacy systems.
+* **Tier 1 — Full Pipeline (Rust + Perl 6):** Rust daemonizes and supervises; Perl 6 parses the legacy `~/.config/openbox/autostart` config at runtime, strips noise, comments, normalizes `~/` > `$HOME/`, structures lockfile guards as native Perl 6 conditionals, and emits a clean exec script.
+* **Tier 2 — Safe Shell Executor (Rust only):** When Perl 6 is unavailable, Rust still provides memory-safe daemonization, unified logging, and process supervision while exec the legacy autostart directly via `/bin/sh`.
+* **Tier 3 — Pure Legacy (Neither):** When neither Rust nor Perl 6 is installed, Openbox falls back to its old native `C/shell` autostart path unchanged, ensuring zero breakage on minimal or legacy systems.
 
 Unified session logging to `~/.cache/openbox/session-init.log`.
 
@@ -106,7 +106,7 @@ The project employs a structured **VPATH build execution** matrix to separate bi
 
 ## Compilation & Deployment
 
-Execute the fully automated build using the omni-patch script:
+Execute the fully automated build using the `omni-patch0build.sh` script:
 
 ```bash
 ./omni-patch-build.sh
