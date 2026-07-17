@@ -32,13 +32,13 @@ Unified session logging to `~/.cache/openbox/session-init.log`.
 
 | Feature | Legacy Openbox Autostart | Tier 1 (Full Pipeline) | Tier 2 (Safe Shell) | Tier 3 (Pure Legacy) |
 | :--- | :--- | :--- | :--- | :--- |
-| **Runtime Dependencies** | `/bin/sh` only | Rust + Raku | Rust only | None |
+| **Runtime Dependencies** | `/bin/sh` only | Rust + Perl 6 | Rust only | None |
 | **Process Supervision** | ❌ None | ✅ Rust daemon | ✅ Rust daemon | ❌ None |
 | **Memory Safety** | ❌ Shell/C only | ✅ Rust supervisor | ✅ Rust supervisor | ❌ Shell/C only |
 | **Unified Logging** | ❌ Scattered outputs | ✅ Single log stream | ✅ Single log stream | ❌ Scattered outputs |
-| **Autostart Parsing** | Raw shell execution | Raku transpilation | Raw shell execution | Raw shell execution |
+| **Autostart Parsing** | Raw shell execution | Perl 6 transpilation | Raw shell execution | Raw shell execution |
 | **Comment/Noise Stripping** | ❌ Manual | ✅ Automatic | ❌ Manual | ❌ Manual |
-| **Lockfile Guards** | Bash `if/fi` blocks | Native Raku conditionals | Bash `if/fi` blocks | Bash `if/fi` blocks |
+| **Lockfile Guards** | Bash `if/fi` blocks | Native Perl 6 conditionals | Bash `if/fi` blocks | Bash `if/fi` blocks |
 | **Path Normalization** | ❌ Shell-dependent | ✅ `$HOME` at transpile time | ❌ Shell-dependent | ❌ Shell-dependent |
 | **Stale Artifact Protection** | N/A | ✅ Auto-reset on failure | N/A | N/A |
 | **Edit → Apply Cycle** | Next login | Next login (auto-transpile) | Next login | Next login |
