@@ -1,3 +1,5 @@
+![Openbox 3 logo](assets/ob3_logo.png)
+
 # Openbox 3.8.0
 
 A modernized, high-performance continuation of Openbox, re-engineered for strict memory safety, modern toolchains, native XLibre optimization, and a novel polyglot session management pipeline.
@@ -25,6 +27,23 @@ A Rust-supervised, Perl 6-transpiled session manager that replaces legacy autost
 * **Tier 3 — Pure Legacy (Neither):** When neither Rust nor Perl 6 is installed, Openbox falls back to its old native `C/shell` autostart path unchanged, ensuring zero breakage on minimal or legacy systems.
 
 Unified session logging to `~/.cache/openbox/session-init.log`.
+
+## Session Management Comparison
+
+| Feature | Legacy Openbox Autostart | Tier 1 (Full Pipeline) | Tier 2 (Safe Shell) | Tier 3 (Pure Legacy) |
+| :--- | :--- | :--- | :--- | :--- |
+| **Runtime Dependencies** | `/bin/sh` only | Rust + Raku | Rust only | None |
+| **Process Supervision** | ❌ None | ✅ Rust daemon | ✅ Rust daemon | ❌ None |
+| **Memory Safety** | ❌ Shell/C only | ✅ Rust supervisor | ✅ Rust supervisor | ❌ Shell/C only |
+| **Unified Logging** | ❌ Scattered outputs | ✅ Single log stream | ✅ Single log stream | ❌ Scattered outputs |
+| **Autostart Parsing** | Raw shell execution | Raku transpilation | Raw shell execution | Raw shell execution |
+| **Comment/Noise Stripping** | ❌ Manual | ✅ Automatic | ❌ Manual | ❌ Manual |
+| **Lockfile Guards** | Bash `if/fi` blocks | Native Raku conditionals | Bash `if/fi` blocks | Bash `if/fi` blocks |
+| **Path Normalization** | ❌ Shell-dependent | ✅ `$HOME` at transpile time | ❌ Shell-dependent | ❌ Shell-dependent |
+| **Stale Artifact Protection** | N/A | ✅ Auto-reset on failure | N/A | N/A |
+| **Edit → Apply Cycle** | Next login | Next login (auto-transpile) | Next login | Next login |
+| **Source of Truth** | `~/.config/openbox/autostart` | `~/.config/openbox/autostart` | `~/.config/openbox/autostart` | `~/.config/openbox/autostart` |
+| **Graceful Degradation** | ❌ No fallback | → Tier 2 → Tier 3 | → Tier 3 | Terminal fallback |
 
 ### 2. Strict Memory Safety & Bug Fixes
 
@@ -106,7 +125,7 @@ The project employs a structured **VPATH build execution** matrix to separate bi
 
 ## Compilation & Deployment
 
-Execute the fully automated build using the `omni-patch0build.sh` script:
+Execute the fully automated build using the `omni-patch-build.sh` script:
 
 ```bash
 ./omni-patch-build.sh
