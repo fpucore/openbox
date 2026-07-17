@@ -1,4 +1,4 @@
-![Openbox 3 logo](assets/ob3_logo.png)
+![Openbox 3 logo](assets/ob3-logo.png)
 
 # Openbox 3.8.0
 
