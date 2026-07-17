@@ -1,24 +1,40 @@
-Openbox authors/contributors:
+Openbox maintainers/authors/contributors:
 
+Chris McGimpsey-Jones (chrisjones.unixmen@gmail.com)
+ - Maintainer and Lead developer (>v3.7.2)
+ - Strict memory safety overhaul (obt/prop.c heap allocation fix)
+ - GLib 2.70+ API migration and const-correctness patches
+ - XLibre display server optimization
+ - Polyglot session-init (Rust/Perl 6 transpilation pipeline)
+ 
 Mikael Magnusson (mikachu@icculus.org)
  - Developer
+
 Dana Jansens (danakj@orodu.net)
- - Lead developer
+ - Lead developer (<v3.7.2)
+
 Derek Foreman (manmower@openbox.org)
  - Rendering code
+
 Tore Anderson (tore@linpro.no)
  - Directional focus, edge moving/growing actions
+
 Audun Hove (audun@nlc.no)
  - Actions code, move window to edge actions
+
 Marius Nita (marius@cs.pdx.edu)
  - Otk prototype code, design ideas.
+
 John McKnight (jmcknight@gmail.com)
  - Clearlooks themes
+
 David Barr (david@chalkskeletons.com)
  - Bear2 theme
  - Clearlooks theme
  - Icon
+
 Brandon Cash
  - SplitVertical gradient style
+
 Dan Rise
  - Natura theme

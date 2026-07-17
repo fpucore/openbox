@@ -1,5 +1,19 @@
 #!/bin/sh
 
+# --- session-init integration ---
+if [ -x "@bindir@/session-init" ]; then
+    "@bindir@/session-init"
+    exit 0
+fi
+# ------------------------------------------
+
+# --- session-init integration --- 
+if [ -x "@bindir@/session-init" ]; then 
+    "@bindir@/session-init" 
+    exit 0 
+fi 
+# ------------------------------------------
+
 # Set a background color
 BG=""
 if which hsetroot >/dev/null 2>/dev/null; then

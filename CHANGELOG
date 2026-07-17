@@ -1,3 +1,29 @@
+3.8.0
+  * Introduced polyglot session-init: a Rust-supervised, Perl 6-transpiled
+    session manager that replaces legacy autostart execution with a
+    three-tier graceful degradation pipeline.
+  * Tier 1 (Full Pipeline): Rust daemonizes and supervises; Perl 6 parses
+    the legacy ~/.config/openbox/autostart config at runtime, strips noise,
+    comments, normalizes ~/ > $HOME/, structures lockfile guards as
+    native Perl 6 conditionals, and emits a clean exec script.
+  * Tier 2 (Safe Shell Executor): When Perl 6 is unavailable, Rust still
+    provides memory-safe daemonization, unified logging, and process
+    supervision while exec the legacy autostart directly via /bin/sh.
+  * Tier 3 (Pure Legacy): When neither Rust nor Perl 6 is installed,
+    Openbox falls back to its old native C/shell autostart path unchanged,
+    ensuring zero breakage on minimal or legacy systems.
+  * Legacy autostart remains the single source of truth; edits are
+    picked up automatically on every login with no rebuild or user 
+    intervention required.
+  * Unified session logging to ~/.cache/openbox/session-init.log merges
+    Rust supervisor timestamps, transpiler status, and child process
+    output into a single auditable stream for debugging.
+  * The build system performs dual toolchain detection at both build time 
+    and runtime, with pre-compiled fallback binary support for envs 
+    lacking or having accessible Rust or Perl 6.
+  * All 3.7.2 memory safety, GLib modernization, const-correctness,
+    and X server optimizations remain intact and fully validated.
+
 3.7.2 (3.6.1 > 3.7.2 fork):
   * Global modernization to GLib 2.70+ standards across the codebase.
   * Replaced deprecated g_memdup calls with g_memdup2 to prevent potential

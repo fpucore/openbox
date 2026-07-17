@@ -1,0 +1,20 @@
+# rust build artifacts
+session-init/target/
+
+# DO NOT ignore session-init-fallback pre-compiled binary — it is required for Tier 3
+
+# autotools generated files
+autom4te.cache/
+*.gmo
+*.mo
+stamp-po
+
+# build dir
+build/
+
+# editor/os artifacts
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
