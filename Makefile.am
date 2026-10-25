@@ -588,10 +588,10 @@ dist_noinst_DATA = \
 
 dist_doc_DATA = \
 	COMPLIANCE \
-	README \
+	README.md \
 	AUTHORS \
 	CHANGELOG \
-	COPYING \
+	LICENSE \
 	data/rc.xsd \
 	data/menu.xsd \
 	doc/rc-mouse-focus.xml

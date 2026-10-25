@@ -1,3 +1,8 @@
+3.8.1
+  * Ported memory-leak fixes.
+    - Commit by Mikael Magnusson 
+  * Raised minimum GLib requirement to 2.28.
+
 3.8.0
   * Introduced polyglot session-init: a Rust-supervised, Perl 6-transpiled
     session manager that replaces legacy autostart execution with a

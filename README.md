@@ -1,6 +1,6 @@
 ![Openbox 3 logo](assets/ob3-logo.png)
 
-# Openbox 3.8.0
+# Openbox 3.8.1
 
 A modernized, high-performance continuation of Openbox, re-engineered for strict memory safety, modern toolchains, native XLibre optimization, and a novel polyglot session management pipeline.
 
@@ -8,7 +8,7 @@ A modernized, high-performance continuation of Openbox, re-engineered for strict
 
 ## Overview
 
-The 3.8.0 release bridges the gap between classic minimalist window management and modern systems architecture.
+Openbox bridges the gap between classic minimalist window management and modern systems architecture.
 
 Development upstream has historically relied on legacy code dependencies that trigger extensive diagnostics under modern GCC/Clang toolchains and lack safe, flexible session initialization.
 
@@ -18,7 +18,7 @@ This continuation of Openbox implements a comprehensive modernization pipelineâ€
 
 ## Technical Enhancements & Modernization
 
-### 1. Polyglot Session-Init (New in v3.8.0)
+### 1. Polyglot Session-Init (Introduced v3.8.0)
 
 A Rust-supervised, Perl 6-transpiled session manager that replaces legacy autostart exec with a three-tier graceful degradation pipeline:
 

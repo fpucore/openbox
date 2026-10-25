@@ -1,6 +1,7 @@
 /* -*- indent-tabs-mode: nil; tab-width: 4; c-basic-offset: 4; -*-
 
    screen.c for the Openbox window manager
+   Copyright (c) 2026        Chris McGimpsey-Jones
    Copyright (c) 2006        Mikael Magnusson
    Copyright (c) 2003-2007   Dana Jansens
 
@@ -1503,6 +1504,7 @@ void screen_update_areas(void)
     for (it = onscreen; it; it = g_list_next(it))
         client_reconfigure(it->data, FALSE);
 
+    g_list_free(onscreen);
     g_free(dims);
 }
 

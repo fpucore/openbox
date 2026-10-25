@@ -1,5 +1,5 @@
 AC_PREREQ([2.54])
-AC_INIT([openbox], [3.8.0], [http://bugzilla.icculus.org])
+AC_INIT([openbox], [3.8.1], [https://www.freedompublishersunion.net])
 AC_CONFIG_SRCDIR([openbox/openbox.c])
 
 AM_INIT_AUTOMAKE([foreign])
@@ -113,7 +113,7 @@ if test "$DIRNAME" = "no"; then
   AC_MSG_ERROR([The program "dirname" is not available. This program is required to build Openbox.])
 fi
 
-PKG_CHECK_MODULES([GLIB], [glib-2.0 >= 2.14.0])
+PKG_CHECK_MODULES([GLIB], [glib-2.0 >= 2.28.0])
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
 

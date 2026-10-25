@@ -1,6 +1,7 @@
 /* -*- indent-tabs-mode: nil; tab-width: 4; c-basic-offset: 4; -*-
 
    config.c for the Openbox window manager
+   Copyright (c) 2026        Chris McGimpsey-Jones
    Copyright (c) 2006        Mikael Magnusson
    Copyright (c) 2003-2007   Dana Jansens
 
@@ -995,8 +996,9 @@ static void bind_default_keyboard(void)
         { NULL, NULL }
     };
     for (it = binds; it->key; ++it) {
-        GList *l = g_list_append(NULL, g_strdup(it->key));
+        GList *l = g_list_append(NULL, (gchar*)it->key);
         keyboard_bind(l, actions_parse_string(it->actname));
+        g_list_free(l);
     }
 }
 

@@ -1,6 +1,7 @@
 /* -*- indent-tabs-mode: nil; tab-width: 4; c-basic-offset: 4; -*-
 
    stacking.c for the Openbox window manager
+   Copyright (c) 2026        Chris McGimpsey-Jones
    Copyright (c) 2006        Mikael Magnusson
    Copyright (c) 2003-2007   Dana Jansens
 
@@ -390,6 +391,7 @@ static void restack_windows(ObClient *selected, gboolean raise)
         /* call restack for each of these to lower them */
         for (sit = reorder; sit; sit = g_slist_next(sit))
             restack_windows(sit->data, raise);
+        g_slist_free(reorder);
     }
 }
 
@@ -489,6 +491,7 @@ static GList *find_highest_relative(ObClient *client)
                     }
                 }
             }
+            g_slist_free(top);
         }
     }
     return ret;
