@@ -1,6 +1,6 @@
 
 //  /------------------------------------------------------------------------------\
-//  | Openbox 3.8.0 session-init: a Rust-supervised, Perl 6-transpiled             |
+//  | Openbox 3.8.2 session-init: a Rust-supervised, Perl 6-transpiled             |
 //  | session manager that replaces legacy autostart execution with a              |
 //  | three-tier graceful degradation pipeline.                                    |
 //  |                                                                              |
