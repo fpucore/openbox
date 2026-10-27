@@ -1,6 +1,6 @@
 ![Openbox 3 logo](assets/ob3-logo.png)
 
-# Openbox 3.8.1
+# Openbox 3.8.2
 
 A modernized, high-performance continuation of Openbox, re-engineered for strict memory safety, modern toolchains, native XLibre optimization, and a novel polyglot session management pipeline.
 

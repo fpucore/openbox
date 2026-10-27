@@ -1,3 +1,7 @@
+3.8.2
+  * Fixed broken memory-leak ported fixes in 3.8.1.
+  * Minor fixes to the omni-patch installer.
+
 3.8.1
   * Ported memory-leak fixes.
     - Commit by Mikael Magnusson 
