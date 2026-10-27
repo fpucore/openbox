@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #  /------------------------------------------------------------------------------\
-#  | Openbox 3.8.1 "Omni-Patch" & Build Automator                                 |
+#  | Openbox 3.8.2 "Omni-Patch" & Build Automator                                 |
 #  | Patches and Compiles: Branding, Memory Safety, API Modernization,            |
 #  | Logic Fixes, and Rust-based session-init.                                    |
 #  |                                                                              |
@@ -27,10 +27,10 @@ echo "--- GNU Operating System / H-Linux: Starting Omni-Patch Sequence ---"
 
 # 1. VERSION & BRANDING BUMP
 # Sets the H-Linux standard version and adds your copyright
-echo "[1/8] Applying H-Linux Branding..."
-# Catches both the original upstream (3.6.1) and original fork (3.7.2)
-find . -name "version.h.in" -exec sed -i -E 's/3\.(6\.1|7\.2|8\.0)/3.8.1/g' {} +
-sed -i -E 's/\[3\.(6\.1|7\.2|8\.0)\]/\[3.8.1\]/g' configure.ac
+echo "[1/8] Applying GNU Operating System / H-Linux Branding..."
+# Catches both the original upstream (3.6.1) and original fork (3.7.2)+3.8.0+3.8.1
+find . -name "version.h.in" -exec sed -i -E 's/3\.(6\.1|7\.2|8\.0|8\.1)/3.8.2/g' {} +
+sed -i -E 's/\[3\.(6\.1|7\.2|8\.0|8\.1)\]/\[3.8.2\]/g' configure.ac
 
 # Safety net: Only apply copyright patch if it hasn't been applied already
 if ! grep -q "Chris McGimpsey-Jones" openbox/openbox.c; then
@@ -168,7 +168,7 @@ sudo cp "../session-init/transpile" "/usr/local/bin/transpile"
 sudo chmod +x "/usr/local/bin/transpile"
 
 # CONFIRM
-echo "--- Openbox 3.8.1 Build Complete ---"
+echo "--- Openbox 3.8.2 Compiled and Installed ---"
 
 # VERIFY
 /usr/local/bin/openbox --version

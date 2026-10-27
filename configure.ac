@@ -1,5 +1,5 @@
 AC_PREREQ([2.54])
-AC_INIT([openbox], [3.8.1], [https://www.freedompublishersunion.net])
+AC_INIT([openbox], [3.8.2], [https://www.freedompublishersunion.net])
 AC_CONFIG_SRCDIR([openbox/openbox.c])
 
 AM_INIT_AUTOMAKE([foreign])
