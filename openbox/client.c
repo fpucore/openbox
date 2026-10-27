@@ -1384,7 +1384,6 @@ static void client_get_state(ObClient *self)
 static void client_get_shaped(ObClient *self)
 {
     self->shaped = FALSE;
-    self->shaped_input = FALSE;
 #ifdef SHAPE
     if (obt_display_extension_shape) {
         gint foo;
@@ -1397,23 +1396,6 @@ static void client_get_shaped(ObClient *self)
                            &foo, &ufoo, &ufoo, &foo, &foo, &foo, &ufoo,
                            &ufoo);
         self->shaped = !!s;
-#ifdef ShapeInput
-        { /* when some smart people added ShapeInput they forgot to update XShapeQueryExtents or
-             add a new one for input shapes, so we get to do this instead, yay! */
-            int nrects, ordering;
-            XRectangle *input_rect = XShapeGetRectangles(obt_display, self->window,
-                                                         ShapeInput, &nrects, &ordering);
-            if (nrects == 1 && input_rect->width == self->area.width &&
-                               input_rect->height == self->area.height &&
-                               /* openbox sets the border width of client windows to 0 */
-                               input_rect->x == 0 && input_rect->y == 0) {
-                self->shaped_input = FALSE;
-            } else {
-                self->shaped_input = TRUE;
-            }
-            XFree(input_rect);
-        }
-#endif
     }
 #endif
 }
@@ -1735,21 +1717,18 @@ void client_update_opacity(ObClient *self)
         OBT_PROP_ERASE(self->frame->window, NET_WM_WINDOW_OPACITY);
 }
 
-void client_update_normal_hints(ObClient *realself)
+void client_update_normal_hints(ObClient *self)
 {
-    XSizeHints size = {0};
+    XSizeHints size;
     glong ret;
-    ObClient *self = g_new(ObClient, 1);
 
     /* defaults */
-    realself->min_ratio = 0.0f;
-    realself->max_ratio = 0.0f;
-    SIZE_SET(realself->size_inc, 1, 1);
-    SIZE_SET(realself->base_size, -1, -1);
-    SIZE_SET(realself->min_size, 0, 0);
-    SIZE_SET(realself->max_size, G_MAXINT, G_MAXINT);
-
-    memcpy(self, realself, sizeof(ObClient));
+    self->min_ratio = 0.0f;
+    self->max_ratio = 0.0f;
+    SIZE_SET(self->size_inc, 1, 1);
+    SIZE_SET(self->base_size, -1, -1);
+    SIZE_SET(self->min_size, 0, 0);
+    SIZE_SET(self->max_size, G_MAXINT, G_MAXINT);
 
     /* get the hints from the window */
     if (XGetWMNormalHints(obt_display, self->window, &size, &ret)) {
@@ -1763,9 +1742,6 @@ void client_update_normal_hints(ObClient *realself)
             self->gravity = size.win_gravity;
 
         if (size.flags & PAspect) {
-            if ((unsigned int)size.min_aspect.x > 4096 ||
-                (unsigned int)size.min_aspect.y > 4096)
-                goto invalid_hints;
             if (size.min_aspect.y)
                 self->min_ratio =
                     (gfloat) size.min_aspect.x / size.min_aspect.y;
@@ -1774,33 +1750,17 @@ void client_update_normal_hints(ObClient *realself)
                     (gfloat) size.max_aspect.x / size.max_aspect.y;
         }
 
-        if (size.flags & PMinSize) {
-            if ((unsigned int)size.min_width > 4096 ||
-                (unsigned int)size.min_height > 4096)
-                goto invalid_hints;
+        if (size.flags & PMinSize)
             SIZE_SET(self->min_size, size.min_width, size.min_height);
-        }
 
-        if (size.flags & PMaxSize) {
-            if ((unsigned int)size.max_width > 4096 ||
-                (unsigned int)size.max_height > 4096)
-                goto invalid_hints;
+        if (size.flags & PMaxSize)
             SIZE_SET(self->max_size, size.max_width, size.max_height);
-        }
 
-        if (size.flags & PBaseSize) {
-            if ((unsigned int)size.base_width > 4096 ||
-                (unsigned int)size.base_height > 4096)
-                goto invalid_hints;
+        if (size.flags & PBaseSize)
             SIZE_SET(self->base_size, size.base_width, size.base_height);
-        }
 
-        if (size.flags & PResizeInc && size.width_inc && size.height_inc) {
-            if ((unsigned int)size.width_inc > 4096 ||
-                (unsigned int)size.width_inc > 4096)
-                goto invalid_hints;
+        if (size.flags & PResizeInc && size.width_inc && size.height_inc)
             SIZE_SET(self->size_inc, size.width_inc, size.height_inc);
-        }
 
         ob_debug("Normal hints: min size (%d %d) max size (%d %d)",
                  self->min_size.width, self->min_size.height,
@@ -1811,12 +1771,6 @@ void client_update_normal_hints(ObClient *realself)
     }
     else
         ob_debug("Normal hints: not set");
-    memcpy(realself, self, sizeof(ObClient));
-    g_free(self);
-    return;
-invalid_hints:
-    g_free(self);
-    ob_debug("Normal hints: corruption detected, not setting anything");
 }
 
 static void client_setup_default_decor_and_functions(ObClient *self)
@@ -1985,7 +1939,6 @@ void client_setup_decor_and_functions(ObClient *self, gboolean reconfig)
     /* now we need to check against rules for the client's current state */
     if (self->fullscreen) {
         self->functions &= (OB_CLIENT_FUNC_CLOSE |
-                            OB_CLIENT_FUNC_MOVE |
                             OB_CLIENT_FUNC_FULLSCREEN |
                             OB_CLIENT_FUNC_ICONIFY);
         self->decorations = 0;
@@ -2147,6 +2100,7 @@ void client_update_title(ObClient *self)
     gchar *data = NULL;
     gchar *visible = NULL;
 
+    g_free(self->title);
     g_free(self->original_title);
 
     /* try netwm */
@@ -2159,14 +2113,8 @@ void client_update_title(ObClient *self)
    http://developer.gnome.org/projects/gup/hig/draft_hig_new/windows-alert.html
    */
                 data = g_strdup("");
-            } else {
-                if (self->class && *self->class)
-                    data = g_strdup(self->class);
-                else if (self->name && *self->name)
-                    data = g_strdup(self->name);
-                else
-                    data = g_strdup(_("Unnamed Window"));
-            }
+            } else
+                data = g_strdup(_("Unnamed Window"));
         }
     }
     self->original_title = g_strdup(data);
@@ -2186,18 +2134,15 @@ void client_update_title(ObClient *self)
         g_free(data);
     }
 
-    if (!self->title || strcmp(self->title, visible)) {
-        OBT_PROP_SETS(self->window, NET_WM_VISIBLE_NAME, visible);
-        g_free(self->title);
-        self->title = visible;
-    } else
-        g_free(visible);
+    OBT_PROP_SETS(self->window, NET_WM_VISIBLE_NAME, visible);
+    self->title = visible;
 
     if (self->frame)
         frame_adjust_title(self->frame);
 
     /* update the icon title */
     data = NULL;
+    g_free(self->icon_title);
 
     /* try netwm */
     if (!OBT_PROP_GETS_UTF8(self->window, NET_WM_ICON_NAME, &data))
@@ -2220,12 +2165,8 @@ void client_update_title(ObClient *self)
         g_free(data);
     }
 
-    if (!self->icon_title || strcmp(self->icon_title, visible)) {
-        OBT_PROP_SETS(self->window, NET_WM_VISIBLE_ICON_NAME, visible);
-        g_free(self->icon_title);
-        self->icon_title = visible;
-    } else
-        g_free(visible);
+    OBT_PROP_SETS(self->window, NET_WM_VISIBLE_ICON_NAME, visible);
+    self->icon_title = visible;
 }
 
 void client_update_strut(ObClient *self)
@@ -2764,12 +2705,9 @@ static void client_calc_layer_internal(ObClient *self)
 void client_calc_layer(ObClient *self)
 {
     GList *it;
-    /* the client_calc_layer_internal calls below modify stacking_list,
-       so we have to make a copy to iterate over */
-    GList *list = g_list_copy(stacking_list);
 
     /* skip over stuff above fullscreen layer */
-    for (it = list; it; it = g_list_next(it))
+    for (it = stacking_list; it; it = g_list_next(it))
         if (window_layer(it->data) <= OB_STACKING_LAYER_FULLSCREEN) break;
 
     /* find the windows in the fullscreen layer, and mark them not-visited */
@@ -2782,7 +2720,7 @@ void client_calc_layer(ObClient *self)
     client_calc_layer_internal(self);
 
     /* skip over stuff above fullscreen layer */
-    for (it = list; it; it = g_list_next(it))
+    for (it = stacking_list; it; it = g_list_next(it))
         if (window_layer(it->data) <= OB_STACKING_LAYER_FULLSCREEN) break;
 
     /* now recalc any windows in the fullscreen layer which have not
@@ -2793,8 +2731,6 @@ void client_calc_layer(ObClient *self)
                  !WINDOW_AS_CLIENT(it->data)->visited)
             client_calc_layer_internal(it->data);
     }
-
-    g_list_free(list);
 }
 
 gboolean client_should_show(ObClient *self)
